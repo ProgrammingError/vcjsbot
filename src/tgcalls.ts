@@ -19,7 +19,7 @@ interface CachedConnection {
 const ws = new WebSocket(env.WEBSOCKET_URL);
 const cache = new Map<number, CachedConnection>();
 
-const ffmpegOptions = `$env.FFMP`;
+const ffmpegOptions = env.FFMP;
 ws.on('message', response => {
     const { _, data } = JSON.parse(response.toString());
 
@@ -40,7 +40,7 @@ ws.on('message', response => {
 
 const downloadSong = async (url: string): Promise<Readable> => {
     const { stdout } = await exec(`youtube-dl -f bestaudio -g -- "ytsearch:${url}"`);
-    const ffmpeg = spawn('ffmpeg', ['-y', '-i', stdout.trim(), ...ffmpegOptions]);
+    const ffmpeg = spawn('ffmpeg', ['-y', '-i', stdout.trim(), ...ffmpegOptions.split(" ")]);
     ffmpeg.stderr.on('data', d => console.log(d.toString()));
     return ffmpeg.stdout;
 };
