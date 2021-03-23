@@ -19,5 +19,5 @@ export const playHandler = Composer.command('play', async ctx => {
 
     const index = await addToQueue(chat, text);
 
-    await ctx.reply(index === 0 ? 'Playing.' : `Queued at position ${index}.`);
+    await ctx.reply(index === 0 ? `Playing\n${text}` : `Queued ${text} at position ${index}.`);
 });
