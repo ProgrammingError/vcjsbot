@@ -1,1 +1,0 @@
-worker: source lemonmelon.sh
