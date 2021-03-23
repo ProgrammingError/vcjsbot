@@ -11,7 +11,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "@youtwitface/escape-html": "^1.0.0",
-    "@mapbox/node-pre-gyp": "1.0.0",
+    "@mapbox/node-pre-gyp": "^1.0.0",
     "dotenv": "^8.2.0",
     "envalid": "^7.0.0",
     "telegraf": "^4.0.2",
