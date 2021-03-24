@@ -50,7 +50,7 @@ export const playHandler = Composer.command('play', async ctx => {
             break;
 
         default:
-            message = `<b>Queued</b><break>${soong}<br><b>at position ${index}.</b>`;
+            message = `<b>Queued</b><br>${soong}<br><b>at position ${index}.</b>`;
     }
 
     await ctx.replyWithHTML(message);
