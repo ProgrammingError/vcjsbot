@@ -24,7 +24,7 @@ export const playHandler = Composer.command('play', async ctx => {
     
     let time = '';
 
-    if (song.duration > 0) {
+    if (song.duration && song.duration > 0) {
         time += ' - ';
 
         const hours = Math.floor(song.duration / 3600);
