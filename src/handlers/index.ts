@@ -4,7 +4,7 @@ import { playHandler } from './play';
 import { queueHandler } from './queue';
 import { pauseHandler } from './pause';
 import { skipHandler } from './skip';
-import { somgHandler } from './song';
+import { songHandler } from './current';
 
 export const initHandlers = (): void => {
     bot.use(playHandler);
