@@ -11,5 +11,5 @@ export const initHandlers = (): void => {
     bot.use(queueHandler);
     bot.use(pauseHandler);
     bot.use(skipHandler);
-    bot.use(skipHandler);
+    bot.use(songHandler);
 };
