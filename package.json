@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node build/index.js",
     "build": "tsc",
-    "test": "tsc --noEmit"
+    "test": "tsc --noEmit",
+    "dev": "nodemon src/index.ts"
   },
   "author": "Andrew Lane <contact@lungers.com>",
   "license": "GPL-3.0",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@types/node": "^14.14.25",
     "@types/ws": "^7.4.0",
+    "nodemon": "^2.0.7",
     "ts-node": "^9.1.1",
     "typegram": "^3.1.9",
     "typescript": "^4.1.3"
