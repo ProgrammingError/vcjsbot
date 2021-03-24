@@ -38,7 +38,7 @@ export const playHandler = Composer.command('play', async ctx => {
         }
     }
 
-    soong = `<b>Title:<b> <a href="https://youtu.be/${song.id}">${escapeHtml(song.title)}</a><break><b>Duration:</b> ${time}`;
+    const soong = `<b>Title:<b> <a href="https://youtu.be/${song.id}">${escapeHtml(song.title)}</a><break><b>Duration:</b> ${time}`;
 
     let message;
 
