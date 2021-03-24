@@ -21,10 +21,11 @@ export const playHandler = Composer.command('play', async ctx => {
 
     const index = await addToQueue(chat, text);
     const song = getCurrentSong(chat.id);
-    
+    if (!song) return ctx.replyWithHTML("<i>Currently no song is being played</i>");
+
     let time = '';
 
-    if (song.duration && song.duration > 0) {
+    if (song.duration > 0) {
         time += ' - ';
 
         const hours = Math.floor(song.duration / 3600);
@@ -55,7 +56,5 @@ export const playHandler = Composer.command('play', async ctx => {
             message = `<b>Queued</b><break>${soong}<break><b>at position ${index}.</b>`;
     }
 
-    await ctx.reply(message, {
-        parse_mode: 'HTML',
-    });
+    await ctx.replyWithHTML(message);
 });
