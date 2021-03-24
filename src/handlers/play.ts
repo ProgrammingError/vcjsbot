@@ -26,8 +26,6 @@ export const playHandler = Composer.command('play', async ctx => {
     let soong:string = '- Unknown';
 
     if (song && song.duration > 0) {
-        time += ' - ';
-
         const hours = Math.floor(song.duration / 3600);
         const minutes = Math.floor(song.duration / 60) % 60;
         const seconds = (song.duration % 60).toString().padStart(2, '0');
@@ -37,7 +35,7 @@ export const playHandler = Composer.command('play', async ctx => {
         } else {
             time += `${minutes}:${seconds}`;
         }
-        soong = `<b>Title:<b> <a href="https://youtu.be/${song.id}">${escapeHtml(song.title)}</a><break><b>Duration:</b> ${time}`;
+        soong = `<b>Title:<b> <a href="https://youtu.be/${song.id}">${escapeHtml(song.title)}</a><br><b>Duration:</b> ${time}`;
     }
 
     let message;
@@ -48,11 +46,11 @@ export const playHandler = Composer.command('play', async ctx => {
             break;
 
         case 0:
-            message = `<b>Playing </b><break>${soong}`;
+            message = `<b>Playing </b><br>${soong}`;
             break;
 
         default:
-            message = `<b>Queued</b><break>${soong}<break><b>at position ${index}.</b>`;
+            message = `<b>Queued</b><break>${soong}<br><b>at position ${index}.</b>`;
     }
 
     await ctx.replyWithHTML(message);
