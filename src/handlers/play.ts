@@ -35,7 +35,7 @@ export const playHandler = Composer.command('play', async ctx => {
         } else {
             time += `${minutes}:${seconds}`;
         }
-        soong = `<b>Title:<b> <a href="https://youtu.be/${song.id}">${escapeHtml(song.title)}</a>\n<b>Duration:</b> ${time}`;
+        soong = `<b>Title:</b> <a href="https://youtu.be/${song.id}">${escapeHtml(song.title)}</a>\n<b>Duration:</b> ${time}`;
     }
 
     let message;
