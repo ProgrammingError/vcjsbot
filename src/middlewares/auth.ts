@@ -16,7 +16,7 @@ const Auth: MiddlewareFn<Context> = async (ctx, next) => {
     if ((id && sudos && sudos.includes(id)) || (id == owner)) {
         next();
     } else {
-        ctx.reply("You are not authorized to use my Commands");
+        return ctx.reply("You are not authorized to use my Commands");
     }
 }
 
