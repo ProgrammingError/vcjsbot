@@ -21,11 +21,11 @@ export const playHandler = Composer.command('play', async ctx => {
 
     const index = await addToQueue(chat, text);
     const song = getCurrentSong(chat.id);
-    if (!song) return ctx.replyWithHTML("<i>Currently no song is being played</i>");
 
     let time = '';
+    let soong:string = '- Unknown';
 
-    if (song.duration > 0) {
+    if (song && song.duration > 0) {
         time += ' - ';
 
         const hours = Math.floor(song.duration / 3600);
@@ -37,9 +37,8 @@ export const playHandler = Composer.command('play', async ctx => {
         } else {
             time += `${minutes}:${seconds}`;
         }
+        soong = `<b>Title:<b> <a href="https://youtu.be/${song.id}">${escapeHtml(song.title)}</a><break><b>Duration:</b> ${time}`;
     }
-
-    const soong = `<b>Title:<b> <a href="https://youtu.be/${song.id}">${escapeHtml(song.title)}</a><break><b>Duration:</b> ${time}`;
 
     let message;
 
