@@ -2,7 +2,7 @@ import { Composer } from 'telegraf';
 import { getCurrentSong } from '../tgcalls';
 import escapeHtml from '@youtwitface/escape-html';
 
-export const songHandler = Composer.command('song', ctx => {
+export const songHandler = Composer.command('current', ctx => {
     const { chat } = ctx.message;
 
     if (chat.type !== 'supergroup') {
