@@ -138,7 +138,6 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
                             Markup.button.callback('Skip', 'skip')
                         ]
                     ])
-
                 })
             } catch (error) {
                 console.error(error);

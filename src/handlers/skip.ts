@@ -15,7 +15,7 @@ export const skipHandler = Composer.command('skip', ctx => {
 export const skipCallBack = Composer.action('skip', async ctx => {
     const chat = ctx.callbackQuery.message?.chat;
     
-    if (!chat) return await ctx.answerCbQuery("Invalid Request")
+    if (!chat) return await ctx.answerCbQuery("Invalid Request");
 
     if (chat.type !== 'supergroup') {
         return;
