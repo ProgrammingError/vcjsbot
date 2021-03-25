@@ -135,7 +135,7 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
                     ...Markup.inlineKeyboard([
                         [
                             Markup.button.callback('Pause',`pause:${id}`),
-                            Markup.button.callback('Skip', 'skip')
+                            Markup.button.callback('Skip', `skip:${id}`)
                         ]
                     ])
                 })
