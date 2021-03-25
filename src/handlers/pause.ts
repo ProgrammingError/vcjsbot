@@ -42,19 +42,19 @@ export const pauseCBHandler = Composer.action(/^pause:[a-zA-Z0-9]+$/, async ctx 
     const { id, title, duration } = current;
     if (paused) {
         await ctx.editMessageCaption(`<b>Paused :</b> <a href="https://www.youtube.com/watch?v=${id}">${title}</a>\n` +
-            `<b>Duration :</b> ${getDuration(duration)}`,
-            {
-                parse_mode: 'HTML',
-                ...Markup.inlineKeyboard([
-                    [
-                        Markup.button.callback('Resume', `pause:${id}`),
-                        Markup.button.callback('Skip', 'skip')
-                    ]
-                ])
-            });
+            `<b>Duration :</b> ${getDuration(duration)}`, {
+            parse_mode: 'HTML',
+            ...Markup.inlineKeyboard([
+                [
+                    Markup.button.callback('Resume', `pause:${id}`),
+                    Markup.button.callback('Skip', 'skip')
+                ]
+            ])
+        });
         return await ctx.answerCbQuery("Paused ...");
     } else {
-        await ctx.editMessageCaption(`<b>Resumed : </b> <a href="https://www.youtube.com/watch?v=${id}">${title}</a>`, {
+        await ctx.editMessageCaption(`<b>Resumed : </b> <a href="https://www.youtube.com/watch?v=${id}">${title}</a>\n` +
+            `<b>Duration :</b> ${getDuration(duration)}`, {
             parse_mode: 'HTML',
             ...Markup.inlineKeyboard([
                 [
