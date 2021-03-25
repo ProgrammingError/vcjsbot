@@ -14,7 +14,7 @@ const Auth: MiddlewareFn<Context> = async (ctx, next) => {
     let owner = await getAsync('OWNER');
     let id = ctx.from?.id.toString();
 
-    if ((id && sudos && sudos.includes(id)) || (id == owner)) {
+    if ((id && sudos && sudos.includes(id)) || (id === owner)) {
         next();
     } else {
         if (ctx.message && 'text' in ctx.message && regex.exec(ctx.message.text)) {
