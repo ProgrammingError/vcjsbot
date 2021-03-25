@@ -31,16 +31,17 @@ export const playHandler = Composer.command('play', async ctx => {
         case 0:
             if (song) {
                 const { id, title, duration } = song;
-                ctx.replyWithHTML(`<b>Playing : </b> <a href="https://www.youtube.com/watch?v=${id}">${title}</a>\n` +
-                    `<b>Duration: </b>${getDuration(duration)}`, {
+                ctx.replyWithPhoto(`https://img.youtube.com/vi/${id}/mqdefault.jpg`, {
+                    caption: `<b>Playing : </b> <a href="https://www.youtube.com/watch?v=${id}">${title}</a>\n` +
+                        `<b>Duration: </b>${getDuration(duration)}`,
+                    parse_mode: 'HTML',
                     ...Markup.inlineKeyboard([
                         [
                             Markup.button.callback('Pause', `pause:${id}`),
                             Markup.button.callback('Skip', `skip:${id}`)
                         ]
-                    ]),
-                    disable_web_page_preview: true
-                });
+                    ])
+                })
             }
             break;
         default:
