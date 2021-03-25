@@ -125,6 +125,7 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
     await connection.start(stream.createTrack());
 
     stream.on('finish', async () => {
+        if (last_msg_id) await bot.telegram.deleteMessage(chat.id, last_msg_id);
         if (queue.length > 0) {
             const url = queue.shift()!;
             try {
@@ -132,8 +133,6 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
                 const { title, id, duration } = song.info
                 stream.setReadable(song.stream);
                 cachedConnection.currentSong = song.info;
-
-                if (last_msg_id) await bot.telegram.deleteMessage(chat.id, last_msg_id);
 
                 let resp = await bot.telegram.sendPhoto(chat.id, `https://img.youtube.com/vi/${id}/mqdefault.jpg`, {
                     caption: `<b>Playing : </b> <a href="https://www.youtube.com/watch?v=${id}">${escapeHtml(title)}</a>\n` +
