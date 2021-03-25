@@ -26,7 +26,7 @@ export const pauseCBHandler = Composer.action('pause', async ctx => {
     if (paused) {
         await ctx.editMessageCaption(`<b>Paused :</b> <a href="https://www.youtube.com/watch?v=${id}">${escapeHtml(title)}</a>\n` +
             `<b>Duration :</b> ${getDuration(duration)}\n` +
-            `<b>Paused by :</b> <a href="${ctx.from?.first_name}">${ctx.from?.id}</a>`, {
+            `<b>Paused by :</b> <a href="tg://user?id=${ctx.from?.first_name}">${ctx.from?.id}</a>`, {
             parse_mode: 'HTML',
             ...Markup.inlineKeyboard([
                 [
@@ -39,7 +39,7 @@ export const pauseCBHandler = Composer.action('pause', async ctx => {
     } else {
         await ctx.editMessageCaption(`<b>Playing :</b> <a href="https://www.youtube.com/watch?v=${id}">${escapeHtml(title)}</a>\n` +
             `<b>Duration :</b> ${getDuration(duration)}\n` +
-            `<b>Resumed by :</b> <a href="${ctx.from?.first_name}">${ctx.from?.id}</a>`, {
+            `<b>Resumed by :</b> <a href="tg://user?id=${ctx.from?.first_name}">${ctx.from?.id}</a>`, {
             parse_mode: 'HTML',
             ...Markup.inlineKeyboard([
                 [
