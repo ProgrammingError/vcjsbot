@@ -1,5 +1,5 @@
 import { Composer } from 'telegraf';
-import { skip, getCurrentSong } from '../tgcalls';
+import { skip } from '../tgcalls';
 
 export const skipCBHandler = Composer.action('skip', async ctx => {
     const chat = ctx.callbackQuery.message?.chat;
@@ -14,12 +14,6 @@ export const skipCBHandler = Composer.action('skip', async ctx => {
     }
 
     if (chat.type !== 'supergroup') {
-        return;
-    }
-
-    const current = getCurrentSong(chat.id);
-    if (current && (current.id !== data)) {
-        await ctx.answerCbQuery("Expired ...");
         return;
     }
 
