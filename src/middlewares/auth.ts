@@ -19,7 +19,12 @@ const Auth: MiddlewareFn<Context> = async (ctx, next) => {
     } else {
         if (ctx.message && 'text' in ctx.message && regex.exec(ctx.message.text)) {
             return ctx.reply("You are not authorized to use my Commands");
-        } else {
+        } else if (ctx.callbackQuery) {
+            return ctx.answerCbQuery("You aren't authorized ...", {
+                show_alert: true
+            })
+        }
+        else {
             return;
         }
     }
