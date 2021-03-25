@@ -22,15 +22,27 @@ export const pauseCBHandler = Composer.action(/^pause:[a-zA-Z0-9]+$/, async ctx 
 
     const paused = pause(chat.id);
     const current = getCurrentSong(chat.id);
-    if (!paused || !current) return ctx.answerCbQuery("There's nothing playing here.")
-    const { id, title } = current
-    return await ctx.editMessageCaption(`<b>Paused : </b> <a href="https://www.youtube.com/watch?v=${id}">${title}</a>`, {
-        parse_mode: 'HTML',
-        ...Markup.inlineKeyboard([
-            [
-                Markup.button.callback('Resume', `resume:${id}`),
-                Markup.button.callback('Skip', 'skip')
-            ]
-        ])
-    });
+    if (!current) return ctx.answerCbQuery("There's nothing playing here.")
+    const { id, title } = current;
+    if (paused) {
+        return await ctx.editMessageCaption(`<b>Paused : </b> <a href="https://www.youtube.com/watch?v=${id}">${title}</a>`, {
+            parse_mode: 'HTML',
+            ...Markup.inlineKeyboard([
+                [
+                    Markup.button.callback('Resume', `pause:${id}`),
+                    Markup.button.callback('Skip', 'skip')
+                ]
+            ])
+        });
+    } else {
+        return await ctx.editMessageCaption(`<b>Resumed : </b> <a href="https://www.youtube.com/watch?v=${id}">${title}</a>`, {
+            parse_mode: 'HTML',
+            ...Markup.inlineKeyboard([
+                [
+                    Markup.button.callback('Pause', `pause:${id}`),
+                    Markup.button.callback('Skip', 'skip')
+                ]
+            ])
+        });
+    }
 })
