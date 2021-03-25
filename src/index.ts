@@ -7,5 +7,5 @@ import Auth from './middlewares/auth';
     initHandlers();
     await bot.telegram.deleteWebhook({drop_pending_updates: true});
     await bot.launch();
-    console.log(`@${bot.botInfo?.username} is running...`);
+    await bot.telegram.sendMessage(process.env.LOG_CHANNEL, `@${bot.botInfo?.username} is running...`);
 })();
