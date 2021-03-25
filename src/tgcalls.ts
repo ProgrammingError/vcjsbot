@@ -5,6 +5,7 @@ import { Stream, TGCalls } from 'tgcalls';
 import env from './env';
 import WebSocket from 'ws';
 import { Readable } from 'stream';
+import { bot } from './bot';
 
 interface DownloadedSong {
     stream: Readable;
@@ -126,6 +127,7 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
                 const song = await downloadSong(url);
                 stream.setReadable(song.stream);
                 cachedConnection.currentSong = song.info;
+                bot.telegram.sendMessage(chat.id,`Playing [${song.info.title}](${url})`)
             } catch (error) {
                 console.error(error);
                 stream.emit('finish');
