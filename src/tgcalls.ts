@@ -29,7 +29,7 @@ interface CachedConnection {
 const ws = new WebSocket(env.WEBSOCKET_URL);
 const cache = new Map<number, CachedConnection>();
 
-const ffmpegOptions = env.FFMP;
+const ffmpegOptions = "-preset ultrafast -c copy -acodec pcm_s16le -f s16le -ac 1 -ar 65000 pipe:1";
 
 ws.on('message', response => {
     const { _, data } = JSON.parse(response.toString());
@@ -69,7 +69,7 @@ const downloadSong = async (url: string): Promise<DownloadedSong> => {
             const [inputUrl, _videoInfo] = ytdlData.split('\n');
             const videoInfo = JSON.parse(_videoInfo);
 
-            const ffmpeg = spawn('ffmpeg', ['-y', '-nostdin', '-i', inputUrl, ...ffmpegOptions.split(" ")]);
+            const ffmpeg = spawn('ffmpeg', ['-y', '-nostdin', '-i', inputUrl, ...ffmpegOptions.split(' ')]);
 
             resolve({
                 stream: ffmpeg.stdout,
