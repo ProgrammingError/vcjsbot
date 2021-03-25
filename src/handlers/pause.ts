@@ -25,18 +25,18 @@ export const pauseCBHandler = Composer.action(/^pause:[a-zA-Z0-9]+$/, async ctx 
 
     if (!chat) {
         await ctx.answerCbQuery("Invalid Request");
-        return;
+        return false;
     }
 
     const paused = pause(chat.id);
     const current = getCurrentSong(chat.id);
     if (!current) {
         await ctx.answerCbQuery("There's nothing playing here.");
-        return;
+        return false;
     }
     if (current.id !== data) {
         await ctx.answerCbQuery("Expired ...");
-        return;
+        return false;
     }
 
     const { id, title, duration } = current;

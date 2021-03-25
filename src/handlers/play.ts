@@ -38,7 +38,8 @@ export const playHandler = Composer.command('play', async ctx => {
                             Markup.button.callback('Pause', `pause:${id}`),
                             Markup.button.callback('Skip', `skip:${id}`)
                         ]
-                    ])
+                    ]),
+                    disable_web_page_preview: true
                 });
             }
             break;
