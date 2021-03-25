@@ -126,11 +126,11 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
             const url = queue.shift()!;
             try {
                 const song = await downloadSong(url);
-                const { title, id } = song.info
+                const { title, id, duration} = song.info
                 stream.setReadable(song.stream);
                 cachedConnection.currentSong = song.info;
                 bot.telegram.sendPhoto(chat.id, `https://img.youtube.com/vi/${id}/mqdefault.jpg`, {
-                    caption: `<b>Playing : </b> <a href="https://www.youtube.com/watch?v=${id}">${title}</a>\n<b>Duration: </b>${song.info.duration}`,
+                    caption: `<b>Playing : </b> <a href="https://www.youtube.com/watch?v=${id}">${title}</a>\n<b>Duration: </b>${duration}`,
                     parse_mode: 'HTML',
                     ...Markup.inlineKeyboard([
                         [
