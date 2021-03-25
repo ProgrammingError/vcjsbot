@@ -7,14 +7,22 @@ const getAsync = promisify(client.get).bind(client);
 
 const Auth: MiddlewareFn<Context> = async (ctx, next) => {
     let sudos: string | string[] | null;
+    let vc_sudos: string | string[] | null;
+
     sudos = await getAsync('SUDOS');
+    vc_sudos = await getAsync('VC_SUDOS');
+
     if (sudos && (typeof (sudos) === 'string')) {
         sudos = sudos.split(" ");
+        if (vc_sudos && (typeof (vc_sudos) === 'string')) {
+            sudos = sudos.concat(vc_sudos.split(" "))
+        }
     }
+
     let owner = await getAsync('OWNER');
     let id = ctx.from?.id.toString();
 
-    if ((id && sudos && (typeof(sudos) === 'object') && sudos.includes(id)) || (id === owner)) {
+    if ((id && sudos && (typeof (sudos) === 'object') && sudos.includes(id)) || (id === owner)) {
         next();
     } else {
         if (ctx.message && 'text' in ctx.message && regex.exec(ctx.message.text)) {
