@@ -19,7 +19,7 @@ export const pauseCBHandler = Composer.action('pause', async ctx => {
     const current = getCurrentSong(chat.id);
     if (!current) {
         await ctx.answerCbQuery("There's nothing playing here.");
-        return setTimeout(async () => await ctx.deleteMessage(), 5000);
+        return setTimeout(async () => await ctx.deleteMessage(), 1000);
     }
 
     const { id, title, duration } = current;
