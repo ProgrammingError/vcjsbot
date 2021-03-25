@@ -127,7 +127,7 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
                 const song = await downloadSong(url);
                 stream.setReadable(song.stream);
                 cachedConnection.currentSong = song.info;
-                bot.telegram.sendMessage(chat.id,`Playing [${song.info.title}](${url})`)
+                bot.telegram.sendMessage(chat.id,`**Playing:** [${song.info.title}](http://www.youtube.com/watch?v=${song.info.id})\n**Duration:** ${song.info.duration}`)
             } catch (error) {
                 console.error(error);
                 stream.emit('finish');
