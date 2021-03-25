@@ -8,7 +8,7 @@ const getAsync = promisify(client.get).bind(client);
 const Auth: MiddlewareFn<Context> = async (ctx, next) => {
     let sudos: string | string[] | null;
     sudos = await getAsync('SUDOS');
-    if (sudos) {
+    if (sudos && (typeof (sudos) === 'string')) {
         sudos = sudos.split(" ");
     }
     let owner = await getAsync('OWNER');
