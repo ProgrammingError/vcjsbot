@@ -1,5 +1,6 @@
-import { Composer } from 'telegraf';
+import { Composer, Markup } from 'telegraf';
 import { getCurrentSong } from '../tgcalls';
+import { getDuration } from '../utils';
 import escapeHtml from '@youtwitface/escape-html';
 
 export const songHandler = Composer.command('current', ctx => {
@@ -16,25 +17,16 @@ export const songHandler = Composer.command('current', ctx => {
         return;
     }
 
-    let time = '';
-
-    if (song.duration > 0) {
-        time += ' - ';
-
-        const hours = Math.floor(song.duration / 3600);
-        const minutes = Math.floor(song.duration / 60) % 60;
-        const seconds = (song.duration % 60).toString().padStart(2, '0');
-
-        if (hours > 0) {
-            time += `${hours}:${minutes.toString().padStart(2, '0')}:${seconds}`;
-        } else {
-            time += `${minutes}:${seconds}`;
-        }
-    }
-
-    const message = `<a href="https://youtu.be/${song.id}">${escapeHtml(song.title)}</a>${time}`;
-
-    ctx.reply(message, {
+    const { id, title, duration } = song
+    return ctx.replyWithPhoto(`https://img.youtube.com/vi/${id}/mqdefault.jpg`, {
+        caption: `<b>Playing : </b> <a href="https://www.youtube.com/watch?v=${id}">${escapeHtml(title)}</a>\n` +
+            `<b>Duration: </b>${getDuration(duration)}`,
         parse_mode: 'HTML',
-    });
+        ...Markup.inlineKeyboard([
+            [
+                Markup.button.callback('Pause', `pause`),
+                Markup.button.callback('Skip', `skip`)
+            ]
+        ])
+    })
 });

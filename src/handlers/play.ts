@@ -2,6 +2,7 @@ import { Composer, deunionize, Markup } from 'telegraf';
 import { addToQueue } from '../tgcalls';
 import { getCurrentSong } from '../tgcalls';
 import { getDuration } from '../utils';
+import escapeHtml from '@youtwitface/escape-html';
 
 export const playHandler = Composer.command('play', async ctx => {
     const { chat } = ctx.message;
@@ -32,20 +33,20 @@ export const playHandler = Composer.command('play', async ctx => {
             if (song) {
                 const { id, title, duration } = song;
                 ctx.replyWithPhoto(`https://img.youtube.com/vi/${id}/mqdefault.jpg`, {
-                    caption: `<b>Playing : </b> <a href="https://www.youtube.com/watch?v=${id}">${title}</a>\n` +
+                    caption: `<b>Playing : </b> <a href="https://www.youtube.com/watch?v=${id}">${escapeHtml(title)}</a>\n` +
                         `<b>Duration: </b>${getDuration(duration)}`,
                     parse_mode: 'HTML',
                     ...Markup.inlineKeyboard([
                         [
-                            Markup.button.callback('Pause', `pause:${id}`),
-                            Markup.button.callback('Skip', `skip:${id}`)
+                            Markup.button.callback('Pause', `pause`),
+                            Markup.button.callback('Skip', `skip`)
                         ]
                     ])
                 })
             }
             break;
         default:
-            message = ctx.replyWithHTML(`<b>Queued</b>\n${text}\n<b>at position ${index}.</b>`);
+            message = ctx.replyWithHTML(`<b>Queued</b>\n${escapeHtml(text)}\n<b>at position ${index}.</b>`);
     }
 
 });

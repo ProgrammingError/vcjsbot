@@ -8,6 +8,7 @@ import { Readable } from 'stream';
 import { bot } from './bot';
 import { Markup } from 'telegraf';
 import { getDuration } from './utils';
+import escapeHtml from '@youtwitface/escape-html';
 
 interface DownloadedSong {
     stream: Readable;
@@ -135,17 +136,17 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
                 if (last_msg_id) await bot.telegram.deleteMessage(chat.id, last_msg_id);
 
                 let resp = await bot.telegram.sendPhoto(chat.id, `https://img.youtube.com/vi/${id}/mqdefault.jpg`, {
-                    caption: `<b>Playing : </b> <a href="https://www.youtube.com/watch?v=${id}">${title}</a>\n` +
+                    caption: `<b>Playing : </b> <a href="https://www.youtube.com/watch?v=${id}">${escapeHtml(title)}</a>\n` +
                         `<b>Duration: </b>${getDuration(duration)}`,
                     parse_mode: 'HTML',
                     ...Markup.inlineKeyboard([
                         [
-                            Markup.button.callback('Pause', `pause:${id}`),
-                            Markup.button.callback('Skip', `skip:${id}`)
+                            Markup.button.callback('Pause', `pause`),
+                            Markup.button.callback('Skip', `skip`)
                         ]
                     ])
                 })
-                last_msg_id = resp.message_id
+                last_msg_id = resp.message_id;
             } catch (error) {
                 console.error(error);
                 stream.emit('finish');
