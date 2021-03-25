@@ -20,7 +20,8 @@ export const skipCallBack = Composer.action(/^skip:[a-zA-Z0-9]+$/, async ctx => 
     data = data.split(":")[1];
 
     if (!chat) {
-        return await ctx.answerCbQuery("Invalid Request");
+        await ctx.answerCbQuery("Invalid Request");
+        return
     }
 
     if (chat.type !== 'supergroup') {
@@ -29,9 +30,10 @@ export const skipCallBack = Composer.action(/^skip:[a-zA-Z0-9]+$/, async ctx => 
 
     const current = getCurrentSong(chat.id);
     if (current && (current.id !== data)) {
-        return await ctx.answerCbQuery("Expired ...");
+        await ctx.answerCbQuery("Expired ...");
+        return;
     }
-    
+
     const skipped = skip(chat.id);
 
     return skipped ? await ctx.deleteMessage() : await ctx.answerCbQuery("There's no song playing..")
