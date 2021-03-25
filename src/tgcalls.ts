@@ -130,11 +130,11 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
                 stream.setReadable(song.stream);
                 cachedConnection.currentSong = song.info;
                 bot.telegram.sendPhoto(chat.id, `https://img.youtube.com/vi/${id}/mqdefault.jpg`, {
-                    caption: `<b>Playing : </b> <a href=https://www.youtube.com/watch?v="${id}">${title}</a>`,
+                    caption: `<b>Playing : </b> <a href="https://www.youtube.com/watch?v=${id}">${title}</a>`,
                     parse_mode: 'HTML',
                     ...Markup.inlineKeyboard([
                         [
-                            Markup.button.callback('Pause','pause'),
+                            Markup.button.callback('Pause',`pause:${id}`),
                             Markup.button.callback('Skip', 'skip')
                         ]
                     ])
