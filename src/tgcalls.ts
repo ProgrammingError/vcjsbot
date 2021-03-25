@@ -91,6 +91,7 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
     const connection = new TGCalls({ chat });
     const stream = new Stream();
     const queue: string[] = [];
+    let last_msg_id: number;
 
     const cachedConnection: CachedConnection = {
         connection,
@@ -130,7 +131,10 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
                 const { title, id, duration } = song.info
                 stream.setReadable(song.stream);
                 cachedConnection.currentSong = song.info;
-                bot.telegram.sendPhoto(chat.id, `https://img.youtube.com/vi/${id}/mqdefault.jpg`, {
+
+                if (last_msg_id) await bot.telegram.deleteMessage(chat.id, last_msg_id);
+
+                let resp = await bot.telegram.sendPhoto(chat.id, `https://img.youtube.com/vi/${id}/mqdefault.jpg`, {
                     caption: `<b>Playing : </b> <a href="https://www.youtube.com/watch?v=${id}">${title}</a>\n` +
                         `<b>Duration: </b>${getDuration(duration)}`,
                     parse_mode: 'HTML',
@@ -141,6 +145,7 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
                         ]
                     ])
                 })
+                last_msg_id = resp.message_id
             } catch (error) {
                 console.error(error);
                 stream.emit('finish');
