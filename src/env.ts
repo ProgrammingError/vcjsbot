@@ -7,5 +7,6 @@ export default cleanEnv(process.env, {
     BOT_TOKEN: str(),
     WEBSOCKET_URL: str(),
     REDIS_URI: str(),
-    REDIS_PASSWORD: str()
+    REDIS_PASSWORD: str(),
+    LOG_CHANNEL: str()
 });
