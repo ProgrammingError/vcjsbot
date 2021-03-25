@@ -6,7 +6,6 @@ dotenv.config();
 export default cleanEnv(process.env, {
     BOT_TOKEN: str(),
     WEBSOCKET_URL: str(),
-    FFMP: str(),
     REDIS_URI: str(),
     REDIS_PASSWORD: str()
 });
