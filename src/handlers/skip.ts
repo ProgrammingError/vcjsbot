@@ -1,7 +1,7 @@
 import { Composer } from 'telegraf';
 import { skip } from '../tgcalls';
 
-export const skipCBHandler = Composer.action('skip', async ctx => {
+export const skipCBHandler = Composer.action(/^skip:[a-zA-Z0-9]+$/, async ctx => {
     const chat = ctx.callbackQuery.message?.chat;
 
     if (!chat) {

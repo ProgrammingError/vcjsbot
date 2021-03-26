@@ -38,8 +38,8 @@ export const playHandler = Composer.command('play', async ctx => {
                     parse_mode: 'HTML',
                     ...Markup.inlineKeyboard([
                         [
-                            Markup.button.callback('Pause', `pause`),
-                            Markup.button.callback('Skip', `skip`)
+                            Markup.button.callback('Pause', `pause:${id}`),
+                            Markup.button.callback('Skip', `skip:${id}`)
                         ]
                     ])
                 })

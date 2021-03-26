@@ -3,7 +3,7 @@ import { pause, getCurrentSong } from '../tgcalls';
 import { getDuration } from '../utils';
 import escapeHtml from '@youtwitface/escape-html';
 
-export const pauseCBHandler = Composer.action('pause', async ctx => {
+export const pauseCBHandler = Composer.action(/^pause:[a-zA-Z0-9]+$/, async ctx => {
     const chat = ctx.callbackQuery.message?.chat;
 
     let data: string = '';
@@ -30,8 +30,8 @@ export const pauseCBHandler = Composer.action('pause', async ctx => {
             parse_mode: 'HTML',
             ...Markup.inlineKeyboard([
                 [
-                    Markup.button.callback('Resume', `pause`),
-                    Markup.button.callback('Skip', 'skip')
+                    Markup.button.callback('Resume', `pause:${id}`),
+                    Markup.button.callback('Skip', `skip${id}`)
                 ]
             ])
         });
@@ -43,8 +43,8 @@ export const pauseCBHandler = Composer.action('pause', async ctx => {
             parse_mode: 'HTML',
             ...Markup.inlineKeyboard([
                 [
-                    Markup.button.callback('Pause', `pause`),
-                    Markup.button.callback('Skip', 'skip')
+                    Markup.button.callback('Pause', `pause:${id}`),
+                    Markup.button.callback('Skip', `skip:${id}`)
                 ]
             ])
         });
