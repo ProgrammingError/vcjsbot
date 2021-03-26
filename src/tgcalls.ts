@@ -134,7 +134,7 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
                 stream.setReadable(song.stream);
                 cachedConnection.currentSong = song.info;
 
-                let resp = await bot.telegram.sendPhoto(chat.id, `https://img.youtube.com/vi/${id}/mqdefault.jpg`, {
+                let resp = await bot.telegram.sendPhoto(chat.id, `https://img.youtube.com/vi/${id}/hqdefault.jpg`, {
                     caption: `<b>Playing : </b> <a href="https://www.youtube.com/watch?v=${id}">${escapeHtml(title)}</a>\n` +
                         `<b>Duration: </b>${getDuration(duration)}`,
                     parse_mode: 'HTML',
