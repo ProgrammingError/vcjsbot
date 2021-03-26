@@ -19,7 +19,7 @@ const Auth: MiddlewareFn<Context> = async (ctx, next) => {
         }
     }
 
-    let owner = await getAsync('OWNER');
+    let owner = await getAsync('OWNER_ID');
     let id = ctx.from?.id.toString();
 
     if ((id && sudos && (typeof (sudos) === 'object') && sudos.includes(id)) || (id === owner)) {
