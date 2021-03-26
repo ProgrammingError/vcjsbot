@@ -26,7 +26,7 @@ const Auth: MiddlewareFn<Context> = async (ctx, next) => {
         return next();
     } else {
         if (ctx.message && 'text' in ctx.message && regex.exec(ctx.message.text)) {
-            return next();
+            return;
         } else if (ctx.callbackQuery) {
             return ctx.answerCbQuery("You aren't authorized ...", {
                 show_alert: true
