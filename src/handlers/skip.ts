@@ -2,7 +2,7 @@ import { Composer } from 'telegraf';
 import { skip } from '../tgcalls';
 import checkExpired from '../middlewares/checkExpired';
 
-export const skipCBHandler = Composer.action(/^skip:[a-zA-Z0-9]+$/, checkExpired, async ctx => {
+export const skipCBHandler = Composer.action(/^skip:[a-zA-Z0-9.\-_]+$/, checkExpired, async ctx => {
     const chat = ctx.callbackQuery.message?.chat;
 
     if (!chat) {

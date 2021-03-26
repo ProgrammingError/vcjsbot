@@ -5,7 +5,7 @@ import escapeHtml from '@youtwitface/escape-html';
 import checkExpired from '../middlewares/checkExpired';
 import { logger as log } from '../bot';
 
-export const pauseCBHandler = Composer.action(/^pause:[a-zA-Z0-9]+$/, checkExpired, async ctx => {
+export const pauseCBHandler = Composer.action(/^pause:[a-zA-Z0-9.\-_]+$/, checkExpired, async ctx => {
     console.log("Received Callback");
     const chat = ctx.callbackQuery.message?.chat;
 
