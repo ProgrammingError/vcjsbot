@@ -6,7 +6,7 @@ const Logger: MiddlewareFn<Context> = async (ctx, next) => {
     try {
         next();
     } catch (err) {
-        await log(`<b>Error :</b> ${escapeHtml(err.toString())}`, "HTML");
+        return await log(`<b>Error :</b> ${escapeHtml(err.toString())}`, "HTML");
     }
 }
 
