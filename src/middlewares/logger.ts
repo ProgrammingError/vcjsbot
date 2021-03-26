@@ -4,9 +4,9 @@ import escapeHtml from '@youtwitface/escape-html';
 
 const Logger: MiddlewareFn<Context> = async (ctx, next) => {
     try {
-        next();
+        await next();
     } catch (err) {
-        return await log(`<b>Error :</b> ${escapeHtml(err.toString())}`, "HTML");
+        await log(`<b>Error :</b> ${escapeHtml(err.toString())}`, "HTML");
     }
 }
 
