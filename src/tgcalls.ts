@@ -92,7 +92,6 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
     const connection = new TGCalls({ chat });
     const stream = new Stream();
     const queue: string[] = [];
-    let last_msg_id: number;
 
     const cachedConnection: CachedConnection = {
         connection,
@@ -125,7 +124,6 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
     await connection.start(stream.createTrack());
 
     stream.on('finish', async () => {
-        if (last_msg_id) await bot.telegram.deleteMessage(chat.id, last_msg_id);
         if (queue.length > 0) {
             const url = queue.shift()!;
             try {
@@ -145,7 +143,6 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
                         ]
                     ])
                 })
-                last_msg_id = resp.message_id;
             } catch (error) {
                 console.error(error);
                 stream.emit('finish');
