@@ -1,7 +1,8 @@
 import { Composer } from 'telegraf';
 import { skip } from '../tgcalls';
+import checkExpired from '../middlewares/checkExpired';
 
-export const skipCBHandler = Composer.action(/^skip:[a-zA-Z0-9]+$/, async ctx => {
+export const skipCBHandler = Composer.action(/^skip:[a-zA-Z0-9]+$/, checkExpired, async ctx => {
     const chat = ctx.callbackQuery.message?.chat;
 
     if (!chat) {
@@ -17,7 +18,7 @@ export const skipCBHandler = Composer.action(/^skip:[a-zA-Z0-9]+$/, async ctx =>
 
     if (skipped) {
         await ctx.answerCbQuery("Skipped ...");
-        setTimeout(async () => await ctx.deleteMessage(),1000);
+        setTimeout(async () => await ctx.deleteMessage(), 1000);
     } else {
         await ctx.answerCbQuery("There's no song playing..")
     }
