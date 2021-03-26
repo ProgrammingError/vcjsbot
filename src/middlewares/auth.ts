@@ -23,10 +23,10 @@ const Auth: MiddlewareFn<Context> = async (ctx, next) => {
     let id = ctx.from?.id.toString();
 
     if ((id && sudos && (typeof (sudos) === 'object') && sudos.includes(id)) || (id === owner)) {
-        next();
+        return next();
     } else {
         if (ctx.message && 'text' in ctx.message && regex.exec(ctx.message.text)) {
-            return;
+            return next();
         } else if (ctx.callbackQuery) {
             return ctx.answerCbQuery("You aren't authorized ...", {
                 show_alert: true
