@@ -3,8 +3,9 @@ import { pause, getCurrentSong } from '../tgcalls';
 import { getDuration } from '../utils';
 import escapeHtml from '@youtwitface/escape-html';
 import checkExpired from '../middlewares/checkExpired';
+import Auth from '../middlewares/auth';
 
-export const pauseCBHandler = Composer.action(/^pause:[a-zA-Z0-9.\-_]+$/, checkExpired, async ctx => {
+export const pauseCBHandler = Composer.action(/^pause:[a-zA-Z0-9.\-_]+$/, Auth, checkExpired, async ctx => {
     const chat = ctx.callbackQuery.message?.chat;
 
     let data: string = '';
