@@ -1,7 +1,6 @@
 import { bot, logger as log } from './bot';
 import { initHandlers } from './handlers';
 import { initMiddleWares } from './middlewares';
-import env from './env';
 
 (async () => {
     initMiddleWares();
