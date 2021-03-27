@@ -17,10 +17,12 @@ export const songHandler = Composer.command('current', ctx => {
         return;
     }
 
-    const { id, title, duration } = song
+    const { id, title, duration } = song.song;
+    const { id: from_id, f_name } = song.by;
     return ctx.replyWithPhoto(`https://img.youtube.com/vi/${id}/hqdefault.jpg`, {
         caption: `<b>Playing : </b> <a href="https://www.youtube.com/watch?v=${id}">${escapeHtml(title)}</a>\n` +
-            `<b>Duration: </b>${getDuration(duration)}`,
+            `<b>Duration: </b>${getDuration(duration)}\n` +
+            `<b>Requested by :</b> <a href="tg://user?id=${from_id}">${f_name}</a>`,
         parse_mode: 'HTML',
         ...Markup.inlineKeyboard([
             [

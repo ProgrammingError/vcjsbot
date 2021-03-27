@@ -11,7 +11,7 @@ const checkExpired: MiddlewareFn<Context> = async (ctx, next) => {
             let [_, id] = ctx.callbackQuery.data.split(":");
             let current = getCurrentSong(chat.id);
 
-            if (current && (current.id !== id)) {
+            if (current && (current.song.id !== id)) {
                 await ctx.answerCbQuery("This Button is Expired ...");
                 return setTimeout(async () => await ctx.deleteMessage(), 2500);
             } else {
