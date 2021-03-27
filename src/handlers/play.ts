@@ -51,12 +51,16 @@ export const playHandler = Composer.command('play', async ctx => {
         default:
             const queue = getQueue(chat.id);
             if (queue) {
-                const { info, from } = queue[0];
-                await ctx.replyWithHTML(
-                    `<b>Queued :</b> <a href="https://www.youtube.com/watch?v=${info.id}">${escapeHtml(info.title)}</a>\n` +
+                let queueId = queue.length - 1
+                const { info, from } = queue[queueId];
+                await ctx.replyWithHTML(`<b>Queued :</b> <a href="https://www.youtube.com/watch?v=${info.id}">${escapeHtml(info.title)}</a>\n` +
                     `<b>At position ${index}.</b>\n` +
-                    `<b>Requested By :</b> <a href="tg://user?id=${from.id}">${from.f_name}</a>`
-                );
+                    `<b>Requested By :</b> <a href="tg://user?id=${from.id}">${from.f_name}</a>`, {
+                    disable_web_page_preview: true,
+                    // ...Markup.inlineKeyboard([
+                    //     [Markup.button.callback('Delete from Queue', `delq:${queueId}`)]
+                    // ])
+                });
             } else {
                 log("Queue not found in " + chat.title)
             }

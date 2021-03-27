@@ -2,7 +2,7 @@ import { Composer } from 'telegraf';
 import { getQueue } from '../tgcalls';
 import escapeHtml from '@youtwitface/escape-html';
 
-export const queueHandler = Composer.command('queue', ctx => {
+export const queueHandler = Composer.command('queue', async ctx => {
     const { chat } = ctx.message;
 
     if (chat.type !== 'supergroup') {
@@ -18,5 +18,5 @@ export const queueHandler = Composer.command('queue', ctx => {
             }).join('\n')
             : 'The queue is empty.';
 
-    ctx.replyWithHTML(message, { disable_web_page_preview: true });
+    await ctx.replyWithHTML(message, { disable_web_page_preview: true });
 });

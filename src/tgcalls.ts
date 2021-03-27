@@ -255,9 +255,17 @@ export const getQueue = (chatId: number): Queue[] | null => {
         const { queue } = cache.get(chatId)!;
         return Array.from(queue);
     }
-
     return null;
 };
+
+export const removeQueue = (chatId: number, id: number): boolean => {
+    if (cache.has(chatId)) {
+        const { queue } = cache.get(chatId)!;
+        if (id > queue.length) return false;
+        if (queue.splice(id, 1)) return true;
+    }
+    return false;
+}
 
 export const pause = (chatId: number): boolean | null => {
     if (cache.has(chatId)) {
