@@ -1,7 +1,8 @@
 import { Composer, deunionize, Markup } from 'telegraf';
-import { addToQueue } from '../tgcalls';
+import { addToQueue, getQueue } from '../tgcalls';
 import { getCurrentSong } from '../tgcalls';
 import { getDuration } from '../utils';
+import { logger as log } from '../bot';
 import escapeHtml from '@youtwitface/escape-html';
 
 export const playHandler = Composer.command('play', async ctx => {
@@ -26,8 +27,6 @@ export const playHandler = Composer.command('play', async ctx => {
     });
     const song = getCurrentSong(chat.id);
 
-    let message;
-
     switch (index) {
         case -1:
             await ctx.reply("Failed to download song ...")
@@ -50,7 +49,17 @@ export const playHandler = Composer.command('play', async ctx => {
             }
             break;
         default:
-            message = ctx.replyWithHTML(`<b>Queued</b>\n${escapeHtml(text)}\n<b>at position ${index}.</b>`);
+            const queue = getQueue(chat.id);
+            if (queue) {
+                const { info, from } = queue[0];
+                await ctx.replyWithHTML(
+                    `<b>Queued :</b> <a href="https://www.youtube.com/watch?v=${info.id}">${escapeHtml(info.title)}</a>\n` +
+                    `<b>At position ${index}.</b>\n` +
+                    `<b>Requested By :</b> <a href="tg://user?id=${from.id}">${from.f_name}</a>`
+                );
+            } else {
+                log("Queue not found in " + chat.title)
+            }
     }
 
 });

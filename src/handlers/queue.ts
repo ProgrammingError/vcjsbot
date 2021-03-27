@@ -14,7 +14,7 @@ export const queueHandler = Composer.command('queue', ctx => {
         queue && queue.length > 0
             ? queue.map((data, index) => {
                 const { info, from } = data;
-                return `⮊<b> ${index + 1} -</b> <a href="https://www.youtube.com/watch?v=${info.id}">${escapeHtml(info.title)}</a>\n<i>Requested By : <a href="tg://user?id=${from.id}">${from.f_name}</a></i>`
+                return `<b>${index + 1} -</b> <a href="https://www.youtube.com/watch?v=${info.id}">${escapeHtml(info.title)}</a>\n<i>Requested By : <a href="tg://user?id=${from.id}">${from.f_name}</a></i>`
             }).join('\n')
             : 'The queue is empty.';
 
