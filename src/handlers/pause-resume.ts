@@ -22,11 +22,13 @@ export const pauseCBHandler = Composer.action(/^pause:[a-zA-Z0-9.\-_]+$/, checkE
         return setTimeout(async () => await ctx.deleteMessage(), 1000);
     }
 
-    const { id, title, duration } = current;
+    const { id, title, duration } = current.song;
+    const { id: id_by, f_name } = current.by;
     if (paused) {
         await ctx.editMessageCaption(`<b>Paused :</b> <a href="https://www.youtube.com/watch?v=${id}">${escapeHtml(title)}</a>\n` +
             `<b>Duration :</b> ${getDuration(duration)}\n` +
-            `<b>Paused by :</b> <a href="tg://user?id=${ctx.from?.id}">${ctx.from?.first_name}</a>`, {
+            `<b>Paused by :</b> <a href="tg://user?id=${ctx.from?.id}">${ctx.from?.first_name}</a>\n` +
+            `<b>Requested by :</b> <a href="tg://user?id=${id_by}">${f_name}</a>`, {
             parse_mode: 'HTML',
             ...Markup.inlineKeyboard([
                 [
@@ -39,7 +41,8 @@ export const pauseCBHandler = Composer.action(/^pause:[a-zA-Z0-9.\-_]+$/, checkE
     } else {
         await ctx.editMessageCaption(`<b>Playing :</b> <a href="https://www.youtube.com/watch?v=${id}">${escapeHtml(title)}</a>\n` +
             `<b>Duration :</b> ${getDuration(duration)}\n` +
-            `<b>Resumed by :</b> <a href="tg://user?id=${ctx.from?.id}">${ctx.from?.first_name}</a>`, {
+            `<b>Resumed by :</b> <a href="tg://user?id=${ctx.from?.id}">${ctx.from?.first_name}</a>\n` +
+            `<b>Requested by :</b> <a href="tg://user?id=${id_by}">${f_name}</a>`, {
             parse_mode: 'HTML',
             ...Markup.inlineKeyboard([
                 [

@@ -20,7 +20,10 @@ export const playHandler = Composer.command('play', async ctx => {
         return;
     }
 
-    const index = await addToQueue(chat, text);
+    const index = await addToQueue(chat, text, {
+        id: ctx.from.id,
+        f_name: ctx.from.first_name
+    });
     const song = getCurrentSong(chat.id);
 
     let message;
@@ -31,10 +34,11 @@ export const playHandler = Composer.command('play', async ctx => {
             break;
         case 0:
             if (song) {
-                const { id, title, duration } = song;
+                const { id, title, duration } = song.song;
                 ctx.replyWithPhoto(`https://img.youtube.com/vi/${id}/hqdefault.jpg`, {
                     caption: `<b>Playing : </b> <a href="https://www.youtube.com/watch?v=${id}">${escapeHtml(title)}</a>\n` +
-                        `<b>Duration: </b>${getDuration(duration)}`,
+                        `<b>Duration: </b>${getDuration(duration)}\n` +
+                        `<b>Requested by :</b> <a href="tg://user?id=${song.by.id}">${song.by.f_name}</a>`,
                     parse_mode: 'HTML',
                     ...Markup.inlineKeyboard([
                         [

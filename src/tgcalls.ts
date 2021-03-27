@@ -19,11 +19,25 @@ interface DownloadedSong {
     };
 }
 
+interface Queue {
+    url: string;
+    info: DownloadedSong['info'];
+    from: {
+        id: string | number;
+        f_name: string;
+    };
+}
+
+interface CurrentSong {
+    song: DownloadedSong['info'],
+    by: Queue['from']
+}
+
 interface CachedConnection {
     connection: TGCalls<{ chat: Chat.SupergroupChat }>;
     stream: Stream;
-    queue: string[];
-    currentSong: DownloadedSong['info'] | null;
+    queue: Queue[];
+    currentSong: CurrentSong | null;
     joinResolve?: (value: JoinVoiceCallResponse) => void;
 }
 
@@ -84,6 +98,36 @@ const downloadSong = async (url: string): Promise<DownloadedSong> => {
     });
 };
 
+
+export const getSongInfo = async (url: string): Promise<DownloadedSong['info']> => {
+    return new Promise((resolve, reject) => {
+        const ytdlChunks: string[] = [];
+        const ytdl = spawn('youtube-dl', ['-x', '--print-json', '-g', `ytsearch:"${url}"`]);
+
+        ytdl.stderr.on('data', data => console.error(data.toString()));
+
+        ytdl.stdout.on('data', data => {
+            ytdlChunks.push(data.toString());
+        });
+
+        ytdl.on('exit', code => {
+            if (code !== 0) {
+                return reject();
+            }
+
+            const ytdlData = ytdlChunks.join('');
+            const [inputUrl, _videoInfo] = ytdlData.split('\n');
+            const videoInfo = JSON.parse(_videoInfo);
+
+            resolve({
+                id: videoInfo.id,
+                title: videoInfo.title,
+                duration: videoInfo.duration,
+            });
+        });
+    });
+};
+
 const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
     if (cache.has(chat.id)) {
         return;
@@ -91,7 +135,14 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
 
     const connection = new TGCalls({ chat });
     const stream = new Stream();
-    const queue: string[] = [];
+    const queue: {
+        url: string,
+        info: DownloadedSong['info'],
+        from: {
+            id: string | number,
+            f_name: string
+        }
+    }[] = [];
 
     const cachedConnection: CachedConnection = {
         connection,
@@ -125,16 +176,20 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
 
     stream.on('finish', async () => {
         if (queue.length > 0) {
-            const url = queue.shift()!;
+            const { url, from } = queue.shift()!;
             try {
                 const song = await downloadSong(url);
                 const { title, id, duration } = song.info
                 stream.setReadable(song.stream);
-                cachedConnection.currentSong = song.info;
+                cachedConnection.currentSong = {
+                    song: song.info,
+                    by: from
+                };
 
-                let resp = await bot.telegram.sendPhoto(chat.id, `https://img.youtube.com/vi/${id}/hqdefault.jpg`, {
+                await bot.telegram.sendPhoto(chat.id, `https://img.youtube.com/vi/${id}/hqdefault.jpg`, {
                     caption: `<b>Playing : </b> <a href="https://www.youtube.com/watch?v=${id}">${escapeHtml(title)}</a>\n` +
-                        `<b>Duration: </b>${getDuration(duration)}`,
+                        `<b>Duration : </b>${getDuration(duration)}\n` +
+                        `<b>Requested by :</b> <a href="tg://user?id=${from.id}">${from.f_name}</a>`,
                     parse_mode: 'HTML',
                     ...Markup.inlineKeyboard([
                         [
@@ -151,20 +206,24 @@ const createConnection = async (chat: Chat.SupergroupChat): Promise<void> => {
     });
 };
 
-export const addToQueue = async (chat: Chat.SupergroupChat, url: string): Promise<number | null> => {
+export const addToQueue = async (chat: Chat.SupergroupChat, url: string, by: Queue['from']): Promise<number | null> => {
     if (!cache.has(chat.id)) {
         await createConnection(chat);
-        return addToQueue(chat, url);
+        return addToQueue(chat, url, by);
     }
 
     const connection = cache.get(chat.id)!;
     const { stream, queue } = connection;
 
+    let songInfo: DownloadedSong['info'] = await getSongInfo(url);
     if (stream.finished) {
         try {
             const song = await downloadSong(url);
             stream.setReadable(song.stream);
-            connection.currentSong = song.info;
+            connection.currentSong = {
+                song: song.info,
+                by: by
+            };
 
             cache.set(chat.id, connection);
         } catch (error) {
@@ -175,10 +234,14 @@ export const addToQueue = async (chat: Chat.SupergroupChat, url: string): Promis
         return 0;
     }
 
-    return queue.push(url);
+    return queue.push({
+        url: url,
+        from: by,
+        info: songInfo
+    });
 };
 
-export const getCurrentSong = (chatId: number): DownloadedSong['info'] | null => {
+export const getCurrentSong = (chatId: number): CurrentSong | null => {
     if (cache.has(chatId)) {
         const { currentSong } = cache.get(chatId)!;
         return currentSong;
@@ -187,7 +250,7 @@ export const getCurrentSong = (chatId: number): DownloadedSong['info'] | null =>
     return null;
 };
 
-export const getQueue = (chatId: number): string[] | null => {
+export const getQueue = (chatId: number): Queue[] | null => {
     if (cache.has(chatId)) {
         const { queue } = cache.get(chatId)!;
         return Array.from(queue);
