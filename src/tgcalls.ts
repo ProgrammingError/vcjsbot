@@ -215,7 +215,7 @@ export const addToQueue = async (chat: Chat.SupergroupChat, url: string, by: Que
     const connection = cache.get(chat.id)!;
     const { stream, queue } = connection;
 
-    let songInfo: DownloadedSong['info'] = await getSongInfo(url);
+    let songInfo: DownloadedSong['info'];
     if (stream.finished) {
         try {
             const song = await downloadSong(url);
@@ -224,16 +224,16 @@ export const addToQueue = async (chat: Chat.SupergroupChat, url: string, by: Que
                 song: song.info,
                 by: by
             };
-
+            songInfo = song.info;
             cache.set(chat.id, connection);
         } catch (error) {
             console.error(error);
             return -1;
         }
-
         return 0;
+    } else {
+        songInfo = await getSongInfo(url);
     }
-
     return queue.push({
         url: url,
         from: by,
